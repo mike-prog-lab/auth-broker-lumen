@@ -13,6 +13,5 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
-});
+$router->post('/signup', 'Auth\SignupController@signup');
+$router->post('/login', 'Auth\LoginController@login');
