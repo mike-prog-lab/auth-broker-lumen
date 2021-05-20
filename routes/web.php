@@ -15,3 +15,9 @@
 
 $router->post('/signup', 'Auth\SignupController@signup');
 $router->post('/login', 'Auth\LoginController@login');
+
+$router->group([
+    'middleware' => 'auth',
+], function () use ($router) {
+    $router->get('/user', 'User\UserController@index');
+});
