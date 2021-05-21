@@ -11,6 +11,9 @@ jobs:
 #      packages: write
 #      contents: read
     steps:
+      - name: Docker tag from github.ref
+      - id: docker-tag
+        uses: yuya-takeyama/docker-tag-from-github-ref-action@v1.0.0
       - name: Check out the repo
         uses: actions/checkout@v2
       - name: Log in to GitHub Docker Registry
@@ -24,4 +27,4 @@ jobs:
         with:
           push: true
           tags: |
-            docker.pkg.github.com/${{ github.repository }}/php-fpm-7.4:${{ github.ref##*/ }}
+            docker.pkg.github.com/${{ github.repository }}/php-fpm-7.4:${{ steps.docker-tag.outputs.tag }}
