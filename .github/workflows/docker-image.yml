@@ -26,4 +26,4 @@ jobs:
         with:
           push: true
           tags: |
-            docker.pkg.github.com/${{ github.repository }}/php-fpm-7.4:${{ github.ref##*/ }}
+            docker.pkg.github.com/${{ github.repository }}/php-fpm-7.4:${{ steps.docker-tag.outputs.tag }
