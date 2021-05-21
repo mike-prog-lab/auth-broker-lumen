@@ -55,8 +55,7 @@ RUN set -ex; \
     mv composer.phar /usr/local/bin/composer ; \
     chmod -R 755 /usr/local/bin/composer ; \
     groupadd -g 1000 www ; \
-    useradd -u 1000 -ms /bin/bash -g www www ; \
-    mkdir /var/log/supervisor/queues
+    useradd -u 1000 -ms /bin/bash -g www www
 
 COPY --chown=www:www . .
 
