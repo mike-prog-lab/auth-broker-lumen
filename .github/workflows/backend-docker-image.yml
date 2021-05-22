@@ -1,4 +1,4 @@
-name: Publish Frontend Docker image
+name: Publish Backend Docker image
 
 on:
   release:
