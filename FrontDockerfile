@@ -4,8 +4,7 @@ WORKDIR /tmpbuild
 
 COPY ./client /tmpbuild
 
-RUN echo "deb http://deb.debian.org/debian stretch-backports main contrib non-free" >> /etc/apt/sources.list; \
-    apt-get update; \
+RUN apt-get update; \
     apt-get -t stretch-backports install git -y ; \
     npm i --only=prod ; \
     npm run build
