@@ -1,4 +1,5 @@
 name: Publish Backend Docker image
+
 on:
   release:
     types: [published]
@@ -17,7 +18,7 @@ jobs:
           echo IMAGE_REPOSITORY=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
       - id: docker-build-push
         name: Docker Build and Push
-        uses: docker/build-push-action@v1
+        uses: docker/build-push-action@v2
         with:
           registry: docker.pkg.github.com
           repository: ${{ env.IMAGE_REPOSITORY }}/php-fpm-7.4:${{ steps.docker-tag.outputs.tag }}

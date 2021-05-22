@@ -1,4 +1,5 @@
 name: Publish Frontend Docker image
+
 on:
   release:
     types: [published]
