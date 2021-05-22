@@ -1,0 +1,36 @@
+name: Publish Frontend Docker image
+on:
+  release:
+    types: [published]
+
+jobs:
+  push_to_registry:
+    name: Push Docker image to GitHub Packages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - id: docker-tag
+        uses: yuya-takeyama/docker-tag-from-github-ref-action@v1
+      - name: PrepareReg Names
+        run: |
+          echo IMAGE_REPOSITORY=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
+      - name: Set branch-based environment variables
+        uses: iamtheyammer/branch-env-vars@v1.0.3
+        with:
+          API_URL: |
+            development:https://api.dev.content-generation-tool.eml.ua/v1
+          SERVER_API_URL: |
+            development:https://api.dev.content-generation-tool.eml.ua/v1
+          CLIENT_URL: |
+            development:https://app.dev.content-generation-tool.eml.ua
+      - id: docker-build-push
+        name: Docker Build and Push
+        uses: docker/build-push-action@v2
+        with:
+          registry: docker.pkg.github.com
+          repository: ${{ env.IMAGE_REPOSITORY }}/node-14.15.1:${{ steps.docker-tag.outputs.tag }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          path: .
+          dockerfile: ./FrontDockerfile

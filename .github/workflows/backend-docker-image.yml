@@ -1,4 +1,4 @@
-name: Publish Docker image
+name: Publish Backend Docker image
 on:
   release:
     types: [published]
@@ -7,23 +7,21 @@ jobs:
   push_to_registry:
     name: Push Docker image to GitHub Packages
     runs-on: ubuntu-latest
-#    permissions:
-#      packages: write
-#      contents: read
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
       - id: docker-tag
         uses: yuya-takeyama/docker-tag-from-github-ref-action@v1
-      - name: Log in to GitHub Docker Registry
-        uses: docker/login-action@v1
+      - name: PrepareReg Names
+        run: |
+          echo IMAGE_REPOSITORY=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
+      - id: docker-build-push
+        name: Docker Build and Push
+        uses: docker/build-push-action@v1
         with:
           registry: docker.pkg.github.com
+          repository: ${{ env.IMAGE_REPOSITORY }}/php-fpm-7.4:${{ steps.docker-tag.outputs.tag }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build container image
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          tags: |
-            docker.pkg.github.com/${{ github.repository }}/php-fpm-7.4:${{ steps.docker-tag.outputs.tag }}
+          path: .
+          dockerfile: ./Dockerfile
