@@ -1,21 +1,10 @@
-FROM node:14.15.1 AS build
-
-WORKDIR /tmpbuild
-
-COPY ./client /tmpbuild
-
-RUN apt-get update; \
-    apt-get -t stretch-backports install git -y ; \
-    npm i --only=prod ; \
-    npm run build
-
 FROM node:14.15.1
 
 ARG workdir=/var/www/html
 
 WORKDIR $workdir
 
-COPY --from=build /tmpbuild .
+COPY ./client .
 RUN npm install --only=prod
 
 ENTRYPOINT ["npm"]
