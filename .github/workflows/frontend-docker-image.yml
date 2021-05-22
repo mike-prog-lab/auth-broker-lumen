@@ -16,22 +16,16 @@ jobs:
       - name: PrepareReg Names
         run: |
           echo IMAGE_REPOSITORY=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
-      - name: Set branch-based environment variables
-        uses: iamtheyammer/branch-env-vars@v1.0.3
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
         with:
-          API_URL: |
-            development:https://api.dev.content-generation-tool.eml.ua/v1
-          SERVER_API_URL: |
-            development:https://api.dev.content-generation-tool.eml.ua/v1
-          CLIENT_URL: |
-            development:https://app.dev.content-generation-tool.eml.ua
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - id: docker-build-push
         name: Docker Build and Push
         uses: docker/build-push-action@v2
         with:
-          registry: docker.pkg.github.com
-          repository: ${{ env.IMAGE_REPOSITORY }}/node-14.15.1:${{ steps.docker-tag.outputs.tag }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-          path: .
-          dockerfile: ./FrontDockerfile
+          context: .
+          file: ./FrontDockerfile
+          tags: |
+            ${{ env.IMAGE_REPOSITORY }}/node-14.15.1:${{ steps.docker-tag.outputs.tag }}
