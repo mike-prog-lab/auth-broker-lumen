@@ -30,4 +30,4 @@ jobs:
           context: .
           file: ./FrontDockerfile
           tags: |
-            docker.pkg.github.com/${{ env.IMAGE_REPOSITORY }}/node:14.15.1:${{ steps.docker-tag.outputs.tag }}
+            docker.pkg.github.com/${{ env.IMAGE_REPOSITORY }}/node-14.15.1:${{ steps.docker-tag.outputs.tag }}
