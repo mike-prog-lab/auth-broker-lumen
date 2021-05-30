@@ -15,6 +15,7 @@
 
 $router->post('/signup', 'Auth\SignupController@signup');
 $router->post('/login', 'Auth\LoginController@login');
+$router->get('/user/{id}/valid', 'User\UserController@isValidId');
 
 $router->group([
     'middleware' => 'auth',

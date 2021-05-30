@@ -10,6 +10,7 @@ use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Throwable;
 
 /**
@@ -35,31 +36,35 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  \Throwable  $exception
+     * @param  \Throwable  $e
      * @return void
      *
      * @throws \Exception
      */
-    public function report(Throwable $exception)
+    public function report(Throwable $e)
     {
-        parent::report($exception);
+        parent::report($e);
     }
 
     /**
      * Render an exception into an HTTP response.
      *
      * @param  Request  $request
-     * @param  \Throwable  $exception
+     * @param  \Throwable  $e
      * @return Response|JsonResponse
      *
      * @throws \Throwable
      */
-    public function render($request, Throwable $exception)
+    public function render($request, Throwable $e)
     {
-        if ($exception instanceof ValidationException) {
-            return \response()->json($exception->errors(), 400);
+        if ($e instanceof ValidationException) {
+            return \response()->json($e->errors(), 400);
         }
 
-        return parent::render($request, $exception);
+        if ($e instanceof MethodNotAllowedHttpException) {
+            return \response()->json('Method not allowed', 405);
+        }
+
+        return parent::render($request, $e);
     }
 }

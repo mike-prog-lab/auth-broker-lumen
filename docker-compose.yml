@@ -1,0 +1,34 @@
+version: '3.7'
+
+networks:
+  web:
+    driver: bridge
+
+services:
+  mysql:
+    image: mysql
+    container_name: auth_broker_lumen_mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    networks:
+      - web
+    ports:
+      - 3306
+      - ${DB_PORT}:3306
+    volumes:
+      - ./docker/databases:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+
+  phpmyadmin:
+    container_name: auth_broker_lumen_phpmyadmin
+    image: phpmyadmin
+    restart: always
+    tty: true
+    stdin_open: true
+    networks:
+      - web
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOST: mysql

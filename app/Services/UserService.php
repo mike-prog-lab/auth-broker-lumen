@@ -20,4 +20,13 @@ class UserService
     {
         return (new User)->create($data);
     }
+
+    /**
+     * @param int $id
+     * @return User|null
+     */
+    public function find(int $id): ?User
+    {
+        return User::whereId($id)->first();
+    }
 }
