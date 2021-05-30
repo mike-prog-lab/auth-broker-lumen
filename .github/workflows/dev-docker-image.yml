@@ -1,8 +1,9 @@
-name: Publish Backend Docker image
+name: Publish Development Backend Docker image
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - '*-dev'
 
 jobs:
   push_to_registry:
@@ -30,4 +31,5 @@ jobs:
           context: .
           file: ./Dockerfile
           tags: |
-            docker.pkg.github.com/${{ env.IMAGE_REPOSITORY }}/php-fpm-7.4:${{ steps.docker-tag.outputs.tag }}
+            docker.pkg.github.com/${{ env.IMAGE_REPOSITORY }}/auth-tl-php-fpm:${{ steps.docker-tag.outputs.tag }}
+            docker.pkg.github.com/${{ env.IMAGE_REPOSITORY }}/auth-tl-php-fpm:development
